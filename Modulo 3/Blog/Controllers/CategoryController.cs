@@ -2,6 +2,7 @@
 using Blog.Models;
 using Blog.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Controllers
@@ -11,24 +12,16 @@ namespace Blog.Controllers
     {
         [HttpGet("v1/categories")]
         public async Task<IActionResult> GetAsync(
-            [FromServices]BlogDataContext context)
+            [FromServices] BlogDataContext context)
         {
             try
             {
                 var categories = await context.Categories.ToListAsync();
-                var result = new ResultViewModel<List<Category>>(categories);
-                return Ok(result);
+                return Ok(new ResultViewModel<List<Category>>(categories));
             }
             catch (Exception ex)
             {
-                var error = new ErrorViewModel
-                {
-                    Code = "05X04",
-                    Message = "Falha interna no servidor",
-                    Details = ex.Message,
-                };
-                var result = new ResultViewModel<ErrorViewModel>(null, error);
-                return StatusCode(500, result);
+                return StatusCode(500, new ResultViewModel<List<Category>>("05X04 - Falha interna no servidor"));
             }
         }
 
@@ -41,16 +34,16 @@ namespace Blog.Controllers
             {
                 var category = await context
                     .Categories
-                    .FirstOrDefaultAsync(x=>x.Id == id);
+                    .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (category == null)
-                    return NotFound();
+                    return NotFound(new ResultViewModel<Category>("05X00 - Conteúdo não encontrado"));
 
-                return Ok(category);
+                return Ok(new ResultViewModel<Category>(category));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "05X05 - Falha interna no servidor");
+                return StatusCode(500, new ResultViewModel<Category>("05X05 - Falha interna no servidor"));
             }
         }
 
@@ -60,7 +53,7 @@ namespace Blog.Controllers
             [FromServices] BlogDataContext context)
         {
             if (!ModelState.IsValid)
-                return BadRequest();
+                return BadRequest(new ResultViewModel<Category>(ModelState.GetErrors()));
 
             try
             {
@@ -91,7 +84,6 @@ namespace Blog.Controllers
             [FromBody] EditorCategoryViewModel model,
             [FromServices] BlogDataContext context)
         {
-
             try
             {
                 var category = await context
@@ -147,5 +139,11 @@ namespace Blog.Controllers
                 return StatusCode(500, "05X12 - Falha interna no servidor");
             }
         }
+    }
+
+    public static class ModelStateExtension
+    {
+        public static List<string> GetErrors(this ModelStateDictionary modelState)
+            => (from item in modelState.Values from error in item.Errors select error.ErrorMessage).ToList();
     }
 }
