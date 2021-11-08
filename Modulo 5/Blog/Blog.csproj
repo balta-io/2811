@@ -17,4 +17,8 @@
     <PackageReference Include="SecureIdentity" Version="1.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images" />
+  </ItemGroup>
+
 </Project>
