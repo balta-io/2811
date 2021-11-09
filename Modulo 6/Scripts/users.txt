@@ -1,0 +1,26 @@
+{
+        "user": "batman@balta.io",
+        "password": "yft9nbR!fLcVORV$o$J9koP{B"
+    }
+
+{
+        "user": "hulk@balta.io",
+        "password": "b#om%EaM)o@4WTK)rNu3sIpGs"
+    }
+
+
+{
+        "user": "ww@balta.io",
+        "password": "72aXRyuo3aW9bj)t{]L(5M4Hv"
+    }
+
+
+{
+        "user": "ironman@balta.io",
+        "password": "ynF(7A9Ur4ZZNPbtXj;HvC8Sv"
+    }
+
+{
+        "user": "spiderman@balta.io",
+        "password": "mFK29Aˆ)nO;BtW*;*JU3Aeh2c"
+    }
