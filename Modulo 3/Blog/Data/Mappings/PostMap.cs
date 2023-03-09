@@ -54,17 +54,17 @@ namespace Blog.Data.Mappings
                 .WithMany(x => x.Posts)
                 .UsingEntity<Dictionary<string, object>>(
                     "PostTag",
-                    post => post
-                        .HasOne<Tag>()
-                        .WithMany()
-                        .HasForeignKey("PostId")
-                        .HasConstraintName("FK_PostRole_PostId")
-                        .OnDelete(DeleteBehavior.Cascade),
                     tag => tag
-                        .HasOne<Post>()
+                        .HasOne<Tag>()
                         .WithMany()
                         .HasForeignKey("TagId")
                         .HasConstraintName("FK_PostTag_TagId")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    post => post
+                        .HasOne<Post>()
+                        .WithMany()
+                        .HasForeignKey("PostId")
+                        .HasConstraintName("FK_PostTag_PostId")
                         .OnDelete(DeleteBehavior.Cascade));
         }
     }
